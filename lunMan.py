@@ -22,6 +22,7 @@ def main():
 
     d_re = re.compile('.*\"timestamp\":(\d*).*\"bid\":\"(\d*.\d*)\".*\"ask\":\"(\d*.\d*)\".*')
     https = urllib3.PoolManager()
+    filename = "logfile.txt"
 
     for i in range(5):
         resp = https.request('GET', TICK_URL, timeout=5.0)
@@ -38,8 +39,13 @@ def main():
             print("ASK: R" + ask)
         else:
             print("Failed to connect")
-        time.sleep(2)
 
+        with open(filename, 'a') as logfile:
+            logfile.write(str(timestamp) + "\n")
+            logfile.write("bid:" + bid + "\n")
+            logfile.write("ask:" + ask + "\n")
+
+        time.sleep(2)
 
 if __name__ == "__main__":
     main()
